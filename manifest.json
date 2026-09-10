@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 1,
+  "id": "io.github.giulio.hermes-hub",
+  "name": "Hermes Hub",
+  "version": "1.1.0",
+  "author": "giulio",
+  "license": "MIT",
+  "description": "Premium Hermes dashboard for the bar: 7-day token usage, total spend, per-agent breakdown, and streaming quick chat with every configured agent.",
+  "kinds": [
+    "bar-widget"
+  ],
+  "entryPoints": {
+    "barWidget": "Widget.qml"
+  },
+  "barWidget": {
+    "displayName": "Hermes Hub",
+    "description": "Usage, cost, and streaming quick chat across all Hermes agents.",
+    "category": "AI",
+    "aliases": [
+      "hermes",
+      "hub",
+      "usage",
+      "cost",
+      "chat",
+      "agents"
+    ],
+    "allowMultiple": false,
+    "defaultSection": "right",
+    "defaults": {
+      "refreshIntervalSec": 120,
+      "hermesCommand": "hermes-desktop"
+    },
+    "schema": [
+      {
+        "key": "refreshIntervalSec",
+        "type": "integer",
+        "label": "Refresh interval (seconds)",
+        "min": 30,
+        "max": 3600,
+        "step": 30,
+        "defaultValue": 120
+      },
+      {
+        "key": "hermesCommand",
+        "type": "string",
+        "label": "Command to open Hermes",
+        "defaultValue": "hermes-desktop"
+      }
+    ]
+  }
+}
