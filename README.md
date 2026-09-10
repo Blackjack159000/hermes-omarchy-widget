@@ -32,7 +32,9 @@ Built for the Quickshell-based Omarchy shell (Omarchy 4 / "Quattro").
 **Option A — from git (recommended, gets you updates):**
 
 ```bash
-omarchy plugin add https://github.com/<you>/hermes-hub --enable
+omarchy plugin add git@github.com:Blackjack159000/hermes-omarchy-widget.git --enable
+# or over HTTPS:
+omarchy plugin add https://github.com/Blackjack159000/hermes-omarchy-widget.git --enable
 ```
 
 **Option B — from a checkout (if I sent you the folder):**
