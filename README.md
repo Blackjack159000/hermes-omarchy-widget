@@ -136,6 +136,7 @@ the chat sessions you create. The widget and bridge live entirely inside
 | Symptom | Fix |
 |---|---|
 | No icon in the bar | `omarchy restart shell`, then `omarchy plugin list \| grep hermes-hub` |
+| Enabled but never visible | It's probably in the **centre** section — Omarchy only reveals the centre while the pointer is on the bar. Move `{"id": "io.github.giulio.hermes-hub"}` into `bar.layout.right` in `~/.config/omarchy/shell.json`, then `omarchy restart shell` |
 | Icon there, panel empty | `bash doctor.sh` — it will name the reason |
 | Panel says "Bridge starting…" forever | Check `python3` exists; check port 8650 is free (`ss -tln \| grep 8650`) |
 | An agent shows offline | That agent's Hermes isn't running/reachable — the widget is telling the truth |

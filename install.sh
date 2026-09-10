@@ -72,16 +72,48 @@ if command -v omarchy >/dev/null 2>&1; then
     || true
 fi
 
-if grep -q "$PLUGIN_ID" "$HOME/.config/omarchy/shell.json" 2>/dev/null; then
-  echo "   enabled in the bar (right section)"
-else
-  cat <<MSG
-!! Could not enable it automatically. Add it by hand:
-     1. edit ~/.config/omarchy/shell.json
+# Where did it actually land? The section matters: Omarchy reveals `center` only
+# while the pointer is over the bar, so a centre-placed icon is invisible most of
+# the time. Claiming "right" without checking is how you ship a widget nobody sees.
+SHELL_JSON="$HOME/.config/omarchy/shell.json"
+SECTION="$(python3 - "$SHELL_JSON" "$PLUGIN_ID" <<'PY'
+import json, sys
+
+path, pid = sys.argv[1], sys.argv[2]
+try:
+    data = json.load(open(path))
+except Exception:
+    sys.exit(0)
+for section in ("left", "center", "right"):
+    for entry in (data.get("bar", {}).get("layout", {}).get(section) or []):
+        if isinstance(entry, dict) and entry.get("id") == pid:
+            print(section)
+            sys.exit(0)
+PY
+)"
+
+case "$SECTION" in
+  right | left)
+    echo "   enabled in the bar ($SECTION section) — always visible"
+    ;;
+  center)
+    cat <<MSG
+   enabled in the bar (CENTER section).
+   NOTE: Omarchy reveals the centre section only while the pointer is over the
+   bar, so this icon is hidden most of the time. For an always-visible icon, move
+   {"id": "$PLUGIN_ID"} into bar.layout.right in $SHELL_JSON, then run:
+       omarchy restart shell
+MSG
+    ;;
+  *)
+    cat <<MSG
+!! Could not confirm the widget is in the bar. Add it by hand:
+     1. edit $SHELL_JSON
      2. add {"id": "$PLUGIN_ID"} to bar.layout.right
      3. omarchy restart shell
 MSG
-fi
+    ;;
+esac
 
 echo
 echo "== done =="
