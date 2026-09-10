@@ -1,11 +1,24 @@
 #!/usr/bin/env python3
 """Hermes Hub bridge.
 
-A tiny, dependency-free localhost service that powers the Omarchy "Hermes Hub"
-bar widget. It reads the agents already configured for the Hermes desktop
-client (``~/.config/hermes-omarchy/config.toml``) and talks to each agent's
-Hermes gateway directly, so the widget never needs a bridge installed on the
-remote host.
+The widget's data source. A tiny, dependency-free localhost service that finds
+your Hermes agents and asks each one for its usage numbers, so the bar widget
+never needs anything installed on the agent's own host.
+
+It looks for agents in two places, in this order:
+
+  1. ``~/.config/hermes-omarchy/config.toml`` — Omarchy's agent integration.
+     Every ``[profiles.<Name>]`` entry becomes a row. These may be local agents
+     or agents on another machine over LAN/VPN.
+  2. ``~/.hermes/`` — this machine's own Hermes install. Any profile whose
+     OpenAI-compatible API server is enabled (``API_SERVER_ENABLED`` etc. in its
+     ``.env``) becomes a row. This is what makes the widget work on a machine
+     that has never configured Omarchy's agent integration.
+
+If neither yields an agent, ``/state`` carries a ``discovery`` block explaining
+what was looked for and how to fix it, and the widget shows that instead of an
+unexplained empty panel. Run ``python3 bridge.py --check`` for the same report
+without starting the server.
 
 Endpoints (all on 127.0.0.1):
 
